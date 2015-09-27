@@ -1,78 +1,83 @@
 #include <iostream>
 #include <cstdlib>
-#include <cstdio>
 #include <ctime>
 
-#define ROZMIAR 10
 using namespace std;
 
-int tab[ROZMIAR];
-
-void printowanie(int tablica[])
+void printowanie(int tablica[], int *rozmiar)
 {
-    for(int i = 0; i < ROZMIAR; i++) cout << tablica[i] << "  ";
+    for(int i=0; i<*rozmiar; i++)
+        cout << tablica[i] << "  ";
     cout << endl;
 }
 
-void Generowanie(int tablica[])
+
+void generowanie(int tablica[], int *rozmiar, int *range)
 {
-    for(int i = 0; i < ROZMIAR; i++)
-    {
-        tablica[i] = rand()%100;
-    }
+    for(int i=0; i<*rozmiar; i++)
+        tablica[i] = rand()%*range;
 }
 
-void Merge(int i, int j, int k, int tab[])
+
+void get_info(int *rozmiar, int *range)
 {
-    int pom[ROZMIAR];
+    cout << "Podaj ile liczb chcesz wygenerowac." << endl;
+    cin >> *rozmiar;
+    cout << endl;
+    cout << "Podaj zakres generowanych liczb." << endl;
+    cin >> *range;
+    cout << endl;
+}
 
-    for (int index = 0; index < k; index++)
-    {
-        pom[index] = tab[index];
-    }
-    //printowanie(tab);
 
-    int n = i;
-    while(i<=j && j<=k)
+void Merge(int pocz, int sr, int kon, int tab[], int pom[])
+{
+    int i, j, k;
+
+    for (i=pocz; i<=kon; i++) pom[i] = tab[i];
+    i=pocz; j=sr+1; k=pocz;
+
+    while (i<=sr && j<=kon)
     {
-        if(pom[i] < pom[j]){
-            tab[n++] = pom[i++];
-        }
+        if(pom[i]<pom[j])
+            tab[k++]=pom[i++];
         else
-            tab[n++] = pom[j++];
+            tab[k++]=pom[j++];
     }
-    while(i<=j) tab[n++] = pom[i++];
-    while(i<=k) tab[n++] = pom[j++];
-
-    //printowanie(tab);
-    //printowanie(pom);
+    while (i<=sr) tab[k++] = pom[i++];
 }
 
-void MergeSort(int lewy, int prawy, int tab[])
+
+void MergeSort(int lewy, int prawy, int tab[], int pom[])
 {
     int sr;
-    while(lewy < prawy)
+    if(lewy < prawy)
     {
         sr = (lewy+prawy)/2;
-        MergeSort(lewy, sr, tab);
-        MergeSort(sr+1, prawy, tab);
-        Merge(lewy, sr, prawy, tab);
+        MergeSort(lewy, sr, tab, pom);
+        MergeSort(sr+1, prawy, tab, pom);
+        Merge(lewy, sr, prawy, tab, pom);
     }
 
 }
-
-
-
 
 int main ( void )
 {
     srand( time ( NULL ));
 
-    Generowanie(tab);
-    printowanie(tab);
-    Merge(0, 5, ROZMIAR, tab);
-    printowanie(tab);
+    int ile;
+    int range;
+    get_info(&ile, &range);
+    int tab[ile];
+    int pom[ile];
 
+    generowanie(tab, &ile, &range);
+    cout << "Wygenerowane liczby:" << endl;
+    printowanie(tab, &ile);
+
+    MergeSort(0, ile-1, tab, pom);
+    cout << "Posortowane liczby:" << endl;
+    printowanie(tab, &ile);
 
     return 0;
 }

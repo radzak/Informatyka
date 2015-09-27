@@ -4,44 +4,44 @@
 
 using namespace std;
 
-int ile;
-int range;
-
-
-void generowanie(int tablica[])
+void generowanie(int tablica[], int *ile, int *range)
 {
-    for(int i=0; i<ile;i++)
-        tablica[i]=rand()%range;
+    for(int i=0; i<*ile;i++)
+        tablica[i]=rand()%*range;
 }
 
-
-void printowanie(int tablica[])
+void printowanie(int tablica[], int *ile)
 {
-    for(int i=0; i<ile;i++)
+    for(int i=0; i<*ile;i++)
         cout << tablica[i] << "  ";
 }
 
+void get_info(int *ile, int *range)
+{
+    cout << "Podaj ile liczb chcesz wygenerowac w celu posortowania?" << endl;
+    cin >> *ile;
+    cout << endl;
 
-void insertion_sort_liniowy(int tablica[])
+    cout << "Podaj zasieg generowanych liczb?" << endl;
+    cin >> *range;
+    cout << endl;
+}
+
+void insertion_sort_liniowy(int tablica[], int *ile)
 {
     int liczba;
     int x;
-    for(int i=ile-2; i>=0; i--)
+    for(int i=*ile-2; i>=0; i--)
     {
         x = i;
         liczba = tablica[i];
-        cout << "liczba to: " << liczba << endl;
-        while(liczba>tablica[x+1] && x<ile-1)
+        while(liczba>tablica[x+1] && x<*ile-1)
         {
             tablica[x] = tablica[x+1];
-            //printowanie(tablica);
-            cout << endl;
             x++;
         }
-        cout << "liczba to: " << liczba << endl;
         tablica[x] = liczba;
-        printowanie(tablica);
-        cout << "nowy przebieg" << endl;
+        //printowanie(tablica);
     }
 }
 
@@ -50,23 +50,18 @@ void insertion_sort_liniowy(int tablica[])
 
 int main( void )
 {
-    srand(time(NULL));
-    cout << "Podaj ile liczb chcesz wygenerowac w celu posortowania?" << endl;
-    cin >> ile;
-    cout << endl;
-
-    cout << "Podaj zasieg generowanych liczb?" << endl;
-    cin >> range;
-    cout << endl;
-
+    srand( time ( NULL ) );
+    int ile, range;
+    get_info(&ile, &range);
     int tab[ile];
+
     cout << "Wygenerowane liczby to:" << endl;
-    generowanie(tab);
-    printowanie(tab);
-    cout << endl;
-    insertion_sort_liniowy(tab);
-    cout << endl;
-    cout << "Sortowanie liniowe:" << endl;
-    printowanie(tab);
+    generowanie(tab, &ile, &range);
+    printowanie(tab, &ile);
+
+    insertion_sort_liniowy(tab, &ile);
+
+    cout << endl << endl << "Sortowanie liniowe:" << endl;
+    printowanie(tab, &ile);
     return 0;
 }
