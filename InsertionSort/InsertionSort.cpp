@@ -29,9 +29,9 @@ void get_info(int *ile, int *range)
 
 void insertion_sort_liniowy(int tablica[], int *ile)
 {
-    int liczba;
-    int x;
-    for(int i=*ile-2; i>=0; i--)
+    int liczba, x;
+
+    for (int i=*ile-2; i>=0; i--)
     {
         x = i;
         liczba = tablica[i];
@@ -41,12 +41,47 @@ void insertion_sort_liniowy(int tablica[], int *ile)
             x++;
         }
         tablica[x] = liczba;
-        //printowanie(tablica);
     }
 }
 
+void insertion_sort_binarny(int tablica[], int *ile)
+{
+    int liczba, x;
+    int lewy, sr, prawy;
+    for (int i=*ile-2; i>=0; i--)
+    {
+        liczba = tablica[i];
+        lewy = i;
+        prawy = *ile-1;
 
+        while(true){
+        sr = (lewy + prawy) / 2;
+            if(sr==i && tablica[i]>tablica[i+1])
+            {
+                x=i+1;
+                break;
+            }
+            else if(sr==*ile-1)
+            {
+                x = *ile-1;
+                break;
+            }
 
+            if(liczba>=tablica[sr] && liczba<=tablica[sr+1])
+            {
+                x = sr;
+                break;
+            }
+            else if(liczba < tablica[sr])
+                prawy = sr;
+            else if(liczba > tablica[sr])
+                lewy = sr+1;
+        }
+        for(int z=i; z<x; z++)
+            tablica[z] = tablica[z+1];
+        tablica[x]=liczba;
+    }
+}
 
 int main( void )
 {
@@ -58,10 +93,12 @@ int main( void )
     cout << "Wygenerowane liczby to:" << endl;
     generowanie(tab, &ile, &range);
     printowanie(tab, &ile);
+    cout.flush();
 
-    insertion_sort_liniowy(tab, &ile);
+    insertion_sort_binarny(tab, &ile);
+//    insertion_sort_liniowy(tab, &ile);
 
-    cout << endl << endl << "Sortowanie liniowe:" << endl;
+    cout << endl << endl << "Sortowanie binarne:" << endl;
     printowanie(tab, &ile);
     return 0;
 }

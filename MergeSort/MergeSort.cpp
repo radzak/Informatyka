@@ -58,7 +58,6 @@ void MergeSort(int lewy, int prawy, int tab[], int pom[])
         MergeSort(sr+1, prawy, tab, pom);
         Merge(lewy, sr, prawy, tab, pom);
     }
-
 }
 
 int main ( void )
